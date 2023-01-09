@@ -4,8 +4,8 @@
 # Runs after the machine has been logged in into the Tailscale network
 # ==============================================================================
 declare -a addresses
-declare route
 declare -a routes
+declare route
 declare ipinfo
 declare tags
 
@@ -44,7 +44,7 @@ for address in "${addresses[@]}"; do
     fi
 
     ipinfo="$(/usr/bin/ipcalc --json "${address}")"
-    route=($(bashio::jq "${ipinfo}" '.NETWORK + "/" + .PREFIX'))
+    route=$(bashio::jq "${ipinfo}" '.NETWORK + "/" + .PREFIX')
     if ! list::contains "${routes[*]}" "${route}"; then
       routes+=("${route}")
     fi
