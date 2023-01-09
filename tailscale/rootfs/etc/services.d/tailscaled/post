@@ -4,9 +4,21 @@
 # Runs after the machine has been logged in into the Tailscale network
 # ==============================================================================
 declare -a addresses
+declare route
 declare -a routes
 declare ipinfo
 declare tags
+
+function list::contains() {
+  local list=${1}
+  local item=${2}
+
+  if [[ "${list}" =~ (^|[[:space:]])"${item}"($|[[:space:]]) ]]; then
+    return 0
+  else
+    return 1
+  fi
+}
 
 # Find interfaces and matching addresses from which we can extract routes to be advertised
 for interface in $(bashio::network.interfaces); do
@@ -32,7 +44,10 @@ for address in "${addresses[@]}"; do
     fi
 
     ipinfo="$(/usr/bin/ipcalc --json "${address}")"
-    routes+=($(bashio::jq "${ipinfo}" '.NETWORK + "/" + .PREFIX'))
+    route=($(bashio::jq "${ipinfo}" '.NETWORK + "/" + .PREFIX'))
+    if ! list::contains "${routes[*]}" "${route}"; then
+      routes+=("${route}")
+    fi
   fi
 done
 
