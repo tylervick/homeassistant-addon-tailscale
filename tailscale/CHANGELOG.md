@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.0.3 (forked)
+
+- Advertise all supported interfaces as Subnets
+
 ## 0.7.0.2 (forked)
 
 - Rename TLS certificates configuration option from `cert_domain` to `certificate_tailnet_name`

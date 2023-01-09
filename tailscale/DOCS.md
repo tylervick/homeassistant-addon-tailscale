@@ -6,7 +6,11 @@
 >
 > **Installation:** Navigate in your Home Assistant frontend to **Settings** -> **Add-ons** -> **Add-on Store**, in the **...** menu at the top right corner click **Repositories**, add `https://github.com/lmagyar/homeassistant-addon-tailscale` as repository.
 >
-> This fork enables to provision TLS certificates.
+> This fork:
+>   - Enables to provision TLS certificates.
+>   - Advertises all supported interfaces as Subnets
+>   - Bumps Tailscale to 1.34.2
+>   - Bumps base image to 13.0.1
 >
 > For more details, please see the Documentation below.
 
@@ -61,7 +65,7 @@ network right from their interface.
 The add-on exposes "Exit Node" capabilities that you can enable from your
 Tailscale account. Additionally, if the Supervisor managed your network (
 which is the default), the add-on will also advertise routes to your
-subnet to Tailscale.
+subnets on all supported interfaces to Tailscale.
 
 ```yaml
 tags:
