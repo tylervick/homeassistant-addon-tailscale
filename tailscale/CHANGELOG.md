@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.0.2 (forked)
+
+- Rename TLS certificates configuration option from `cert_domain` to `certificate_tailnet_name`
+
 ## 0.7.0.1 (forked)
 
 - Enables to provision TLS certificates
