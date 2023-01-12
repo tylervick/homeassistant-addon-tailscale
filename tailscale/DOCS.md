@@ -37,32 +37,6 @@ the following URL:
 
 <https://login.tailscale.com/start>
 
-## Tailscale Funnel prerequisites
-
-With the Tailscale Funnel feature you can access your Home Assistant instance
-from the wider internet using your Tailscale domain (like
-`https://homeassistant.tail1234.ts.net`) even from devices **without installed
-Tailscale VPN client** (eg. general phones, tablets, laptops).
-
-> **Client** &#8658; _Internet_ &#8658; **Tailscale Funnel** (TCP proxy) &#8658;
-  _VPN_ &#8658; **Tailscale Proxy** (https proxy) &#8594; **HA** (http
-  web-server)
-
-Without the Tailscale Funnel feature, you will be able to access your Home
-Assistant instance only when your devices (eg. phones, tablets, laptops) are
-connected to your Tailscale VPN, there will be no Internet &#8658; VPN TCP
-proxying for https communication.
-
-See [Tailscale Funnel][tailscale_info_funnel] for more information.
-
-> **Note:** _This is an alpha feature that is invite only. Please go to
-  Tailscale's [Settings / Feature Previews page][tailscale_feature], and under
-  the **Funnel** section check that you are invited and have access to this
-  feature._
-  
-To use the Tailscale Funnel feature, you need to modify some of your Home
-Assistant and Tailscale settings.
-
 ### Home Assistant configuration
 
 You must configure Home Assistant to **not** use SSL certificates, to be
@@ -100,30 +74,9 @@ runs on your host network._
 
 ### Tailscale configuration
 
-1. [DNS page][tailscale_dns]: Choose a **Tailnet name** and click **Enable
-   HTTPS** under HTTPS Certificates (see [Enabling HTTPS][tailscale_info_https]
-   for more information)
-1. [Access Controls page][tailscale_acls]: Add the below policy entries to the
-   policy file (see [Server role accounts using ACL tags][tailscale_info_tags]
-   for more information)
-
-```json
-{
-  // (other tailnet policy entries here)
-  "tagOwners": {
-    "tag:funnel": ["<CHANGE-IT-TO-YOUR-LOGIN-EMAIL-ADDRESS>"],
-  },
-  "nodeAttrs": [
-    {
-      "target": ["tag:funnel"],
-      "attr":   ["funnel"],
-    },
-  ],
-}
-```
-
-**Note**: _Replace \<CHANGE-IT-TO-YOUR-LOGIN-EMAIL-ADDRESS\> with your email
-address!_
+[DNS page][tailscale_dns]: Choose a **Tailnet name** and click **Enable HTTPS**
+under HTTPS Certificates (see [Enabling HTTPS][tailscale_info_https] for more
+information)
 
 ## Installation
 
@@ -153,33 +106,7 @@ network right from their interface.
 
 <https://login.tailscale.com/>
 
-## Required Tailscale configuration
-
-1. Find your Home Assistant instance in the [Machines tab][tailscale_machines]
-1. Click on the **&hellip;** icon at the far right and select the **Edit ACL
-   tags...** option
-   - Add `tag:funnel` to the list (see **Prerequisites** above if you can't find
-     it)
-   - Click Save to apply tags
-   - Restart the add-on
-   - Your Home Assistant instance should now be reachable under
-     `https://<machine-name>.<tailnet-name>.ts.net` from devices on the internet
-     without Tailscale VPN client 
-
-   **Note**: _After initial set up it can take up to 10 minutes for the domain
-   to be publicly available. You can use the `dig` command (Linux/MacOS) to
-   regularly check if an A-record is already present for your domain (`dig
-   <machine-name>.<tailnet-name>.ts.net +short` should return an IP address once
-   the record is published)._
-
-   **Note:** _You should not use any port number that you used previously to
-   access Home Assistant from the local network._
-
-   **Note:** _If you encounter strange browser behaviour or strange error
-   messages, try to clear all site related cookies, clear all browser cache,
-   restart browser_
-
-## Optional Tailscale configuration
+## Tailscale configuration
 
 1. Find your Home Assistant instance in the [Machines tab][tailscale_machines]
 1. Click on the **&hellip;** icon at the far right and select the **Edit route
@@ -301,10 +228,6 @@ SOFTWARE.
 [semver]: http://semver.org/spec/v2.0.0.htm
 [warning_stripe]: https://github.com/lmagyar/homeassistant-addon-tailscale/raw/main/images/warning_stripe_wide.png
 [community_addon]: https://github.com/hassio-addons/addon-tailscale
-[tailscale_acls]: https://login.tailscale.com/admin/acls
 [tailscale_dns]: https://login.tailscale.com/admin/dns
-[tailscale_feature]: https://login.tailscale.com/admin/settings/features
-[tailscale_info_funnel]: https://tailscale.com/kb/1223/tailscale-funnel/
 [tailscale_info_https]: https://tailscale.com/kb/1153/enabling-https/
-[tailscale_info_tags]: https://tailscale.com/kb/1068/acl-tags/
 [tailscale_machines]: https://login.tailscale.com/admin/machines
