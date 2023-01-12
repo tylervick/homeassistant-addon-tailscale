@@ -2,6 +2,8 @@
 
 ## vNext (forked)
 
+- Enable Tailscale's Funnel feature
+- Enable Tailscale's Proxy feature
 - Revert explicit TLS certificate provisioning
 
 ## 0.7.0.7 (forked)
