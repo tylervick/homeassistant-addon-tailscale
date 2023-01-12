@@ -22,11 +22,12 @@ function list::contains() {
 
 # Find interfaces and matching addresses from which we can extract routes to be advertised
 for interface in $(bashio::network.interfaces); do
-    addresses+=($(bashio::network.ipv4_address "${interface}"))
-    addresses+=($(bashio::network.ipv6_address "${interface}"))
+  addresses+=($(bashio::network.ipv4_address "${interface}"))
+  addresses+=($(bashio::network.ipv6_address "${interface}"))
 done
-routes=()
 
+# Extract routes to be advertised
+routes=()
 for address in "${addresses[@]}"; do
   if bashio::var.has_value "${address}"; then
     # Skip local link addresses
@@ -43,6 +44,7 @@ for address in "${addresses[@]}"; do
       [[ $(</proc/sys/net/ipv4/ip_forward) -eq 0 ]] && continue
     fi
 
+    # Extract unique routes
     ipinfo="$(/usr/bin/ipcalc --json "${address}")"
     route=$(bashio::jq "${ipinfo}" '.NETWORK + "/" + .PREFIX')
     if ! list::contains "${routes[*]}" "${route}"; then

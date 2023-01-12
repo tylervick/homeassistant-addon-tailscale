@@ -4,7 +4,10 @@
 
 > This is a **fork** of the [community add-on][community_addon]!
 >
-> **Installation:** Navigate in your Home Assistant frontend to **Settings** -> **Add-ons** -> **Add-on Store**, in the **...** menu at the top right corner click **Repositories**, add `https://github.com/lmagyar/homeassistant-addon-tailscale` as repository.
+> **Installation:** Navigate in your Home Assistant frontend to **Settings** ->
+> **Add-ons** -> **Add-on Store**, in the **...** menu at the top right corner
+> click **Repositories**, add
+> `https://github.com/lmagyar/homeassistant-addon-tailscale` as repository.
 >
 > This fork:
 >   - Enables to provision TLS certificates.
@@ -46,10 +49,12 @@ however, it is nice to know where you need to go later on.
 1. Click the "Install" button to install the add-on.
 1. Start the "Tailscale" add-on.
 1. Check the logs of the "Tailscale" add-on to see if everything went well.
-1. Open the Web UI of the "Tailscale" add-on to complete authentication and
+1. Open the **Web UI** of the "Tailscale" add-on to complete authentication and
    couple your Home Assistant instance with your Tailscale account.
-   **Note:** Some browsers don't work with this step. It is recommended to
-   complete this step on a desktop or laptop computer using the Chrome browser.
+
+   **Note:** _Some browsers don't work with this step. It is recommended to
+   complete this step on a desktop or laptop computer using the Chrome browser._
+
 1. Done!
 
 ## Configuration
@@ -143,7 +148,8 @@ You have several options to get them answered:
 - The Home Assistant [Community Forum][forum].
 - Join the [Reddit subreddit][reddit] in [/r/homeassistant][reddit]
 
-You could also [open an issue here with the original add-on][issue] or [open an issue here with the forked add-on][issue_forked] GitHub.
+You could also [open an issue here with the original add-on][issue] or [open an
+issue here with the forked add-on][issue_forked] GitHub.
 
 ## Authors & contributors
 
