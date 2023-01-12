@@ -10,7 +10,6 @@
 > `https://github.com/lmagyar/homeassistant-addon-tailscale` as repository.
 >
 > This fork:
->   - Enables Tailscale's Funnel feature
 >   - Enables Tailscale's Proxy feature
 >   - Advertises all supported interfaces as Subnets
 >   - Bumps Tailscale to 1.36.0
