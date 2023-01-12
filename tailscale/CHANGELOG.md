@@ -1,5 +1,9 @@
 # Changelog
 
+## vNext (forked)
+
+- Revert explicit TLS certificate provisioning
+
 ## 0.7.0.7 (forked)
 
 - Use `log_level` configuration option for tailscaled debug messages
