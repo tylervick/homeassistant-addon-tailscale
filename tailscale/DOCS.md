@@ -77,6 +77,7 @@ tags:
   - tag:example
   - tag:homeassistant
 certificate_tailnet_name: tail9999.ts.net
+debug_messages: false
 ```
 
 ### Option: `tags`
@@ -121,6 +122,11 @@ See [Enabling HTTPS](https://tailscale.com/kb/1153/enabling-https/) for more inf
   - For all the urls the browser **will not** give you a `Not secure` warning
 
 </details>
+
+### Option: `debug_messages`
+
+Optionally enable tailscaled debug messages in the add-on's log. Turn it on only
+in case you are troubleshooting, because Tailscale's daemon is quite chatty.
 
 ## Changelog & Releases
 
