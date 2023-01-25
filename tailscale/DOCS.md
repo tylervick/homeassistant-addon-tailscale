@@ -12,7 +12,7 @@
 > This fork:
 >   - Enables to provision TLS certificates.
 >   - Advertises all supported interfaces as Subnets
->   - Bumps Tailscale to 1.34.2
+>   - Bumps Tailscale to 1.36.0
 >   - Bumps base image to 13.1.1
 >
 > For more details, please see the Documentation below.
