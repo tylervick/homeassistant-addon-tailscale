@@ -1,6 +1,8 @@
 # Changelog
 
-## vNext (forked)
+## 0.7.0.8 (forked)
+
+***Breaking change***
 
 - Enable Tailscale's Proxy feature
 - Revert explicit TLS certificate provisioning
