@@ -10,7 +10,7 @@
 > `https://github.com/lmagyar/homeassistant-addon-tailscale` as repository.
 >
 > This fork:
->   - Enables to provision TLS certificates.
+>   - Enables Tailscale's Proxy feature
 >   - Advertises all supported interfaces as Subnets
 >   - Bumps Tailscale to 1.36.0
 >   - Bumps base image to 13.1.1
@@ -36,8 +36,46 @@ the following URL:
 
 <https://login.tailscale.com/start>
 
-You can also create an account during the add-on installation processes,
-however, it is nice to know where you need to go later on.
+### Home Assistant configuration
+
+You must configure Home Assistant to **not** use SSL certificates, to be
+accessible through plain http connection. The Tailscale https Proxy will access
+Home Assistant through `localhost` and will not accept a real certificate,
+connection will be closed with `proxy error: x509: cannot validate certificate
+for 127.0.0.1 because it doesn't contain any IP SANs`
+
+If you still want to use another https connection to access Home Assistant
+through another network, please use the **NGINX Home Assistant SSL proxy**
+add-on.
+
+So these lines have to be removed from your `/config/configuration.yaml`:
+
+```yaml
+http:
+#  ssl_certificate: /ssl/fullchain.pem
+#  ssl_key: /ssl/privkey.pem
+```
+
+Since Home Assistant by default blocks requests from proxies/reverse proxies,
+you need to tell your instance to allow requests from the Tailscale add-on.
+In order to do so, add the following lines to your `/config/configuration.yaml`
+without changing anything:
+
+```yaml
+http:
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 127.0.0.1
+```
+
+**Note**: _There is no need to adapt anything in these lines since the addon
+runs on your host network._
+
+### Tailscale configuration
+
+[DNS page][tailscale_dns]: Choose a **Tailnet name** and click **Enable HTTPS**
+under HTTPS Certificates (see [Enabling HTTPS][tailscale_info_https] for more
+information)
 
 ## Installation
 
@@ -67,16 +105,25 @@ network right from their interface.
 
 <https://login.tailscale.com/>
 
-The add-on exposes "Exit Node" capabilities that you can enable from your
-Tailscale account. Additionally, if the Supervisor managed your network (
-which is the default), the add-on will also advertise routes to your
-subnets on all supported interfaces to Tailscale.
+## Tailscale configuration
+
+1. Find your Home Assistant instance in the [Machines tab][tailscale_machines]
+1. Click on the **&hellip;** icon at the far right and select the **Edit route
+   settings...** option
+   - The add-on exposes **Exit Node** capabilities that you can enable from your
+     Tailscale account
+   - Additionally, if the Supervisor managed your network (which is the
+     default), the add-on will also advertise routes to your **Subnets** on all
+     supported interfaces, that you can enable from your Tailscale account
+1. Click on the **&hellip;** icon at the far right and select the **Disable key
+   expiry** option
+
+## Add-on configuration
 
 ```yaml
 tags:
   - tag:example
   - tag:homeassistant
-certificate_tailnet_name: tail9999.ts.net
 log_level: info
 ```
 
@@ -86,42 +133,6 @@ This option allows you to specify specific ACL tags for this Tailscale
 instance. They need to start with `tag:`.
 
 More information: <https://tailscale.com/kb/1068/acl-tags/>
-
-### Option: `certificate_tailnet_name`
-
-This option (if set) configures tailscale to provision TLS certificates. The format is the same as for `tailscale cert <machine-name>.<tailnet-name>.ts.net`. It's necessary to set the exact domain under which your Home-Assistant instance is running.
-
-1. Go to [DNS tab](https://login.tailscale.com/admin/dns) in Tailscale's admin page
-2. Choose a **Tailnet name** and click **Enable HTTPS** under HTTPS Certificates
-3. Find your Home-Assistant in the [Machines tab](https://login.tailscale.com/admin/machines) and note under which name your device is reachable
-4. Your device should now be reachable under `https://<machine-name>.<tailnet-name>.ts.net` (but with an invalid ssl certificate)
-5. Go to the **Configuration tab** of this add-on and set the above Tailnet name at `certificate_tailnet_name` (only the Tailnet name `<tailnet-name>.ts.net`, without the machine name)
-6. Restart the add-on, you should now have two new files under `/ssl/tailscale` which you can use to configure any webserver
-7. Visit again the above domain, you should have now a valid ssl certificate (if you encounter strange browser behaviour or strange error messages, try to clear all site related cookies, clear all browser cache, restart browser)
-
-See [Enabling HTTPS](https://tailscale.com/kb/1153/enabling-https/) for more information.
-
-<details>
-<summary><b>Note:</b> This add-on only downloads the Tailscale certificate, but you have to configure a webserver to use it. Some basic configuration examples: (Click to expand!)</summary>
-
-- Your Tailscale connection is only a backup connection (eg. CGNAT-ed mobile internet USB stick) to access Home Assistant
-
-  - Home Assistant uses another certificate generated by eg. the Duck DNS or the Let's Encrypt add-ons
-  - No Tailscale certificate is generated, you are not using this option
-  - Using eg. `https://<...>.duckdns.org` url the browser **will not** give you a `Not secure` warning
-  - Using `https://<...>.ts.net` url the browser **will** give you a `Not secure` warning
-
-- Your Tailscale connection is your main connection to access Home Assistant
-
-  - Home Assistant uses the certificate generated by this add-on
-  - Using `https://<...>.ts.net` url the browser **will not** give you a `Not secure` warning
-
-- There are multiple connections to access Home Assistant
-  - Home Assistant **doesn't** use any certificate, just plain http access
-  - You need eg. the NGINX Home Assistant SSL proxy add-on to use the specific ceriticates for each connection
-  - For all the urls the browser **will not** give you a `Not secure` warning
-
-</details>
 
 ### Option: `log_level`
 
@@ -216,3 +227,6 @@ SOFTWARE.
 [semver]: http://semver.org/spec/v2.0.0.htm
 [warning_stripe]: https://github.com/lmagyar/homeassistant-addon-tailscale/raw/main/images/warning_stripe_wide.png
 [community_addon]: https://github.com/hassio-addons/addon-tailscale
+[tailscale_dns]: https://login.tailscale.com/admin/dns
+[tailscale_info_https]: https://tailscale.com/kb/1153/enabling-https/
+[tailscale_machines]: https://login.tailscale.com/admin/machines
