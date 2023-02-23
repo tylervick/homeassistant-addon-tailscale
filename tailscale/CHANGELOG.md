@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.7.0.10 (forked)
+
+- Bump Tailscale to 1.36.2
+- Bump base image to 13.1.2
+
 ## 0.7.0.9 (forked)
 
 - Bump Tailscale to 1.36.1
