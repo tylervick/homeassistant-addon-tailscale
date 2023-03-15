@@ -12,8 +12,8 @@
 > This fork:
 >   - Enables Tailscale's Proxy feature
 >   - Advertises all supported interfaces as Subnets
->   - Bumps Tailscale to 1.36.2
->   - Bumps base image to 13.1.2
+>   - Bumps Tailscale to 1.38.1
+>   - Bumps base image to 13.1.3
 >
 > For more details, please see the Documentation below.
 
@@ -145,6 +145,7 @@ dealing with an unknown issue. Possible values are:
 - `trace`: Show every detail, like all called internal functions.
 - `debug`: Shows detailed debug information.
 - `info`: Normal (usually) interesting events.
+- `notice`: Normal but significant events.
 - `warning`: Exceptional occurrences that are not errors.
 - `error`: Runtime errors that do not require immediate action.
 - `fatal`: Something went terribly wrong. Add-on becomes unusable.
