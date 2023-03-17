@@ -56,6 +56,9 @@ done
 # Get configured tags
 tags=$(bashio::config "tags//[] | join(\",\")" "")
 
+login_server=$(bashio::config "login_server")
+authkey=$(bashio::config "authkey")
+
 # Wait for socket to be available
 while ! bashio::fs.socket_exists "/var/run/tailscale/tailscaled.sock";
 do
@@ -71,16 +74,34 @@ done
 
 # Start Tailscale
 IFS=","
-if ! /opt/tailscale up \
-  --hostname "$(bashio::info.hostname)" \
-  --advertise-exit-node \
-  --accept-routes \
-  --advertise-routes="${routes[*]}" \
-  --advertise-tags="${tags}";
-then
-  bashio::log.error "Unable to start up Tailscale"
-  bashio::exit.nok
+
+if bashio::var.has_value "${login_server}"; then
+  if ! /opt/tailscale up \
+    --hostname "$(bashio::info.hostname)" \
+    --advertise-exit-node \
+    --accept-routes \
+    --advertise-routes="${routes[*]}" \
+    --advertise-tags="${tags}" \
+    --login-server="${login_server}" \
+    --authkey="${authkey}";
+  then
+    bashio::log.error "Unable to start up Tailscale"
+    bashio::exit.nok
+  fi
+else
+  if ! /opt/tailscale up \
+    --hostname "$(bashio::info.hostname)" \
+    --advertise-exit-node \
+    --accept-routes \
+    --advertise-routes="${routes[*]}" \
+    --advertise-tags="${tags}";
+  then
+    bashio::log.error "Unable to start up Tailscale"
+    bashio::exit.nok
+  fi
 fi
+
+
 
 # Wait for the network to be available and logged in
 while ! /opt/tailscale status --json --peers=false --self=false \
